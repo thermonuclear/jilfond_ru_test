@@ -98,6 +98,5 @@ class NotificationServiceTest extends TestCase
 
         self::assertEquals(NotificationStatus::Failed, $notification->status);
         self::assertEquals('Connection timeout', $notification->last_error);
-        self::assertEquals(1, $notification->attempts);
     }
 }

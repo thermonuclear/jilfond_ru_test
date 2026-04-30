@@ -75,7 +75,6 @@ class NotificationService
      */
     public function markAsFailed(Notification $notification, string $error): void
     {
-        $this->repository->incrementAttempts($notification);
         $this->repository->markAsFailed($notification, $error);
     }
 

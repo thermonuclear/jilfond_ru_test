@@ -4,6 +4,8 @@ namespace App\Jobs;
 
 use App\Models\Notification;
 use App\Services\NotificationService;
+use DateTime;
+use DateTimeInterface;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
@@ -16,6 +18,8 @@ use Throwable;
  *
  * Гарантирует доставку через механизм повторных попыток:
  * - 3 попытки с экспоненциальной задержкой (30, 60, 120 сек)
+ * - TTL 12 часов: после этого времени попытки прекращаются
+ * - Счётчик attempts обновляется при каждой попытке
  * - При успехе: статус меняется на «sent»
  * - При неудаче после всех попыток: статус «failed»
  */
@@ -55,6 +59,8 @@ class SendNotificationJob implements ShouldQueue
      */
     public function handle(NotificationService $service): void
     {
+        $this->notification->increment('attempts');
+
         $service->send($this->notification);
         $service->markAsSent($this->notification);
     }
@@ -66,5 +72,13 @@ class SendNotificationJob implements ShouldQueue
     {
         $service = app(NotificationService::class);
         $service->markAsFailed($this->notification, $exception->getMessage());
+    }
+
+    /**
+     * Время, до которого допускаются повторные попытки.
+     */
+    public function retryUntil(): DateTimeInterface
+    {
+        return new DateTime('+12 hours');
     }
 }
