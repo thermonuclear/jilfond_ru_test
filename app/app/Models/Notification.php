@@ -39,22 +39,16 @@ class Notification extends Model
     /**
      * Scope: фильтрация по статусу.
      */
-    public function scopeByStatus(Builder $query, NotificationStatus $status): Builder
+    public function scopeByStatus(Builder $query, string $status): Builder
     {
         return $query->where('status', $status);
     }
 
-    /**
-     * Scope: фильтрация по каналу.
-     */
-    public function scopeByChannel(Builder $query, NotificationChannel $channel): Builder
+    public function scopeByChannel(Builder $query, string $channel): Builder
     {
         return $query->where('channel', $channel);
     }
 
-    /**
-     * Scope: фильтрация по пользователю.
-     */
     public function scopeForUser(Builder $query, int $userId): Builder
     {
         return $query->where('user_id', $userId);

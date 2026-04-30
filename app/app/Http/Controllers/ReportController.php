@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreReportRequest;
 use App\Jobs\GenerateReportJob;
 use App\Models\Report;
+use App\Services\ReportService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\StreamedResponse;
@@ -17,6 +18,10 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
  */
 class ReportController extends Controller
 {
+    public function __construct(
+        private readonly ReportService $reportService,
+    ) {}
+
     /**
      * Запросить генерацию отчёта.
      *
@@ -24,12 +29,11 @@ class ReportController extends Controller
      */
     public function store(StoreReportRequest $request): JsonResponse
     {
-        $report = Report::create([
-            'user_id' => $request->input('user_id'),
-            'date_from' => $request->input('date_from'),
-            'date_to' => $request->input('date_to'),
-            'status' => 'pending',
-        ]);
+        $report = $this->reportService->createReport(
+            (int) $request->input('user_id'),
+            $request->input('date_from'),
+            $request->input('date_to'),
+        );
 
         GenerateReportJob::dispatch($report);
 

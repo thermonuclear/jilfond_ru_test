@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Enums\NotificationChannel;
 use App\Enums\NotificationStatus;
 use App\Jobs\SendNotificationJob;
 use App\Models\Notification;
@@ -93,8 +92,8 @@ class NotificationService
      *
      * @param array{
      *     user_id?: int,
-     *     status?: NotificationStatus,
-     *     channel?: NotificationChannel,
+     *     status?: string,
+     *     channel?: string,
      *     date_from?: string,
      *     date_to?: string,
      * } $filters

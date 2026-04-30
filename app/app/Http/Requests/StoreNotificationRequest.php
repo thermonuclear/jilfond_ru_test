@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Enums\NotificationChannel;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 /**
  * Валидация запроса создания уведомления.
@@ -28,7 +30,7 @@ class StoreNotificationRequest extends FormRequest
             'user_id' => ['required', 'integer'],
             'message' => ['required', 'string', 'max:500'],
             'channels' => ['required', 'array', 'min:1'],
-            'channels.*' => ['required', 'string', 'in:email,telegram'],
+            'channels.*' => ['required', 'string', Rule::in(array_column(NotificationChannel::cases(), 'value'))],
         ];
     }
 
@@ -41,7 +43,6 @@ class StoreNotificationRequest extends FormRequest
     {
         return [
             'channels.min' => 'Необходимо указать хотя бы один канал доставки.',
-            'channels.*.in' => 'Поддерживаются только каналы: email, telegram.',
         ];
     }
 }

@@ -43,7 +43,7 @@ class NotificationTest extends TestCase
             'status' => NotificationStatus::Failed,
         ]);
 
-        $pending = Notification::byStatus(NotificationStatus::Sent)->get();
+        $pending = Notification::byStatus('sent')->get();
         self::assertCount(1, $pending);
         self::assertEquals(NotificationStatus::Sent, $pending->first()->status);
     }
@@ -64,7 +64,7 @@ class NotificationTest extends TestCase
             'status' => NotificationStatus::Pending,
         ]);
 
-        $email = Notification::byChannel(NotificationChannel::Email)->get();
+        $email = Notification::byChannel('email')->get();
         self::assertCount(1, $email);
         self::assertEquals(NotificationChannel::Email, $email->first()->channel);
     }

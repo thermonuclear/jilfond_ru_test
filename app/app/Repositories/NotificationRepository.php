@@ -2,7 +2,6 @@
 
 namespace App\Repositories;
 
-use App\Enums\NotificationChannel;
 use App\Enums\NotificationStatus;
 use App\Models\Notification;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -37,8 +36,8 @@ class NotificationRepository
      *
      * @param array{
      *     user_id?: int,
-     *     status?: NotificationStatus,
-     *     channel?: NotificationChannel,
+     *     status?: string,
+     *     channel?: string,
      *     date_from?: string,
      *     date_to?: string,
      * } $filters

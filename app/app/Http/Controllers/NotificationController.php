@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use App\Enums\NotificationChannel;
-use App\Enums\NotificationStatus;
 use App\Http\Requests\ListNotificationsRequest;
 use App\Http\Requests\StoreNotificationRequest;
 use App\Http\Resources\NotificationResource;
@@ -54,8 +52,7 @@ class NotificationController extends Controller
      */
     public function index(ListNotificationsRequest $request): JsonResponse
     {
-        $filters = $this->buildFilters($request);
-        $paginator = $this->service->filter($filters);
+        $paginator = $this->service->filter($request->validated());
 
         return response()->json([
             'data' => NotificationResource::collection($paginator->items()),
@@ -66,43 +63,5 @@ class NotificationController extends Controller
                 'total' => $paginator->total(),
             ],
         ]);
-    }
-
-    /**
-     * Собрать фильтры из запроса.
-     *
-     * @return array{
-     *     user_id?: int,
-     *     status?: NotificationStatus,
-     *     channel?: NotificationChannel,
-     *     date_from?: string,
-     *     date_to?: string,
-     * }
-     */
-    private function buildFilters(ListNotificationsRequest $request): array
-    {
-        $filters = [];
-
-        if ($request->has('user_id')) {
-            $filters['user_id'] = (int) $request->input('user_id');
-        }
-
-        if ($request->has('status')) {
-            $filters['status'] = NotificationStatus::from($request->input('status'));
-        }
-
-        if ($request->has('channel')) {
-            $filters['channel'] = NotificationChannel::from($request->input('channel'));
-        }
-
-        if ($request->has('date_from')) {
-            $filters['date_from'] = $request->input('date_from');
-        }
-
-        if ($request->has('date_to')) {
-            $filters['date_to'] = $request->input('date_to');
-        }
-
-        return $filters;
     }
 }

@@ -26,7 +26,7 @@ class ReportService
     private const DIRECTORY = 'reports';
 
     /**
-     * Создать запись отчёта и запустить генерацию.
+     * Создать запись отчёта со статусом pending.
      */
     public function createReport(int $userId, string $dateFrom, string $dateTo): Report
     {
@@ -53,18 +53,6 @@ class ReportService
             'status' => 'ready',
             'file_path' => $path,
         ]);
-    }
-
-    /**
-     * Получить путь к файлу отчёта.
-     */
-    public function getFileContent(Report $report): ?string
-    {
-        if ($report->file_path === null) {
-            return null;
-        }
-
-        return Storage::disk(self::DISK)->get($report->file_path);
     }
 
     /**
