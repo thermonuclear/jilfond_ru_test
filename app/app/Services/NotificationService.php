@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Enums\NotificationChannel;
 use App\Enums\NotificationStatus;
+use App\Jobs\SendNotificationJob;
 use App\Models\Notification;
 use App\Repositories\NotificationRepository;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -44,6 +45,8 @@ class NotificationService
                 'message' => $data['message'],
                 'status' => NotificationStatus::Pending,
             ]);
+
+            SendNotificationJob::dispatch($notification);
 
             $notifications->push($notification);
         }
