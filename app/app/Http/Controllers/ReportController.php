@@ -35,7 +35,9 @@ class ReportController extends Controller
             $request->input('date_to'),
         );
 
-        GenerateReportJob::dispatch($report);
+        if ($report->status === 'pending') {
+            GenerateReportJob::dispatch($report);
+        }
 
         return response()->json([
             'data' => [
@@ -44,7 +46,7 @@ class ReportController extends Controller
                 'date_from' => $report->date_from->toIso8601String(),
                 'date_to' => $report->date_to->toIso8601String(),
             ],
-        ], 201);
+        ], $report->wasRecentlyCreated ? 201 : 200);
     }
 
     /**

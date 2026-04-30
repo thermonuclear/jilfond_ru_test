@@ -27,9 +27,23 @@ class ReportService
 
     /**
      * Создать запись отчёта со статусом pending.
+     *
+     * Если уже существует pending или ready отчёт
+     * за тот же период — возвращает его.
      */
     public function createReport(int $userId, string $dateFrom, string $dateTo): Report
     {
+        $existing = Report::query()
+            ->where('user_id', $userId)
+            ->where('date_from', $dateFrom)
+            ->where('date_to', $dateTo)
+            ->whereIn('status', ['pending', 'ready'])
+            ->first();
+
+        if ($existing !== null) {
+            return $existing;
+        }
+
         return Report::create([
             'user_id' => $userId,
             'date_from' => $dateFrom,
@@ -128,5 +142,15 @@ class ReportService
         Storage::disk(self::DISK)->put($filename, $csv);
 
         return $filename;
+    }
+
+    /**
+     * Удалить файл отчёта.
+     */
+    public function deleteFile(?string $filePath): void
+    {
+        if ($filePath !== null && Storage::disk(self::DISK)->exists($filePath)) {
+            Storage::disk(self::DISK)->delete($filePath);
+        }
     }
 }

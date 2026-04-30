@@ -15,7 +15,7 @@ use Throwable;
  * Job асинхронной генерации отчёта.
  *
  * При успехе: статус ready, файл сохранён.
- * При ошибке: статус failed, сообщение об ошибке.
+ * При ошибке: статус failed, orphan-файл удалён.
  */
 class GenerateReportJob implements ShouldQueue
 {
@@ -39,12 +39,19 @@ class GenerateReportJob implements ShouldQueue
 
     /**
      * Обработка неудачной генерации.
+     *
+     * Удаляет orphan-файл, если он был создан до ошибки,
+     * и помечает отчёт как failed.
      */
     public function failed(Throwable $exception): void
     {
+        $service = app(ReportService::class);
+        $service->deleteFile($this->report->file_path);
+
         $this->report->update([
             'status' => 'failed',
             'error_message' => $exception->getMessage(),
+            'file_path' => null,
         ]);
     }
 }
