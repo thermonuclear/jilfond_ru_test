@@ -376,8 +376,7 @@ docker compose exec php php artisan test
 2. **Laravel Horizon** — дашборд очереди, алерты при большом backlog
 3. **Rate limiting** — защита API от спама
 4. **Шаблоны уведомлений** — система шаблонов с переменными
-5. **User preferences** — пользователь выбирает каналы
-6. **API versioning** — `/api/v1/notifications`
+5. **API versioning** — `/api/v1/notifications`
 
 ## Устранение проблем
 
