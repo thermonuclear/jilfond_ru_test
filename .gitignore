@@ -1,0 +1,50 @@
+# Environment
+.env
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Dependencies
+app/vendor/
+node_modules/
+
+# Build artifacts
+app/public/build/
+app/public/hot/
+app/public/mix-manifest.json
+
+# Laravel
+app/storage/logs/*.log
+app/storage/framework/cache/*
+!app/storage/framework/cache/.gitignore
+app/storage/framework/sessions/*
+!app/storage/framework/sessions/.gitignore
+app/storage/framework/views/*
+!app/storage/framework/views/.gitignore
+app/bootstrap/cache/*
+!app/bootstrap/cache/.gitignore
+
+# Docker volumes
+mysql_data/
+redis_data/
+
+# Debug
+build_output.txt
+*.log
+
+# Composer
+composer.phar
+
+# Pint cache
+.php-cs-fixer.cache
+
+# Project docs
+AGENTS.md

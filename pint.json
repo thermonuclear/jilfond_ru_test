@@ -1,0 +1,23 @@
+{
+    "preset": "psr12",
+    "rules": {
+        "array_syntax": { "syntax": "short" },
+        "ordered_imports": {
+            "sort_algorithm": "alpha",
+            "imports_order": ["class", "function", "const"]
+        },
+        "no_unused_imports": true,
+        "no_empty_statement": true,
+        "single_quote": true,
+        "concat_space": { "spacing": "one" },
+        "trailing_comma_in_multiline": { "elements": ["arrays"] },
+        "visibility_required": {
+            "elements": ["property", "method", "const"]
+        }
+    },
+    "notPath": [
+        "bootstrap/cache",
+        "storage",
+        "vendor"
+    ]
+}
